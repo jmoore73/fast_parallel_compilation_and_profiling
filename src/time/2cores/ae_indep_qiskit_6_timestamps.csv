@@ -1,0 +1,31 @@
+Column, Value
+Name, ae_indep_qiskit_6
+Depth, d
+Density, dens
+Width, w
+Chopping Start Time, 1759348907797217714
+Chopping End Time, 1759348907929861105
+Concatenate Start Time, 1759348909059361764
+Concatenate End Time, 1759348909729514235
+Core 1 Setup Start Time, 1759348908638571173
+Core 1 Setup End Time, 1759348908834372557
+Core 1 Transpile Start Time, 1759348908834377310
+Core 1 Transpile End Time, 1759348908861095970
+Core 1 Permutation Start Time, 1759348908861095970
+Core 1 Permutation End Time, 1759348908862210617
+Core 1 Parallel End Time, 1759348908871731641
+Core 2 Setup Start Time, 1759348908673976752
+Core 2 Setup End Time, 1759348908854159660
+Core 2 Transpile Start Time, 1759348908854166322
+Core 2 Transpile End Time, 1759348908875095784
+Core 2 Permutation Start Time, 1759348908875095784
+Core 2 Permutation End Time, 1759348908875096882
+Core 2 Parallel End Time, 1759348908890341722
+Qiskit Start Time, 1759348909877120045
+Qiskit End Time, 1759348910912485109
+Parallel Swaps, 16
+Parallel Post Transpile Depth, 43
+Parallel Post Transpile Gate Count, 57
+Level 1 Swaps, 11
+Level 1 Post Transpile Depth, 41
+Level 1 Post Transpile Gate Count, 52
