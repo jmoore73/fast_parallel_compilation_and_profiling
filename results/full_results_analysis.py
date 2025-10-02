@@ -1,19 +1,31 @@
 import os
 
-from refined_plots import plot_lines_icrc_paper
+from refined_plots import plot_lines_icrc_paper, generate_single_heatmap
 
 
 if __name__ == '__main__':
 
-    for dataset in ["benchmark_sabre", "random_sabre", "random_basic", "benchmark_basic",
-                    "benchmark_pytket", "random_pytket"]:
-        if "benchmark" in dataset:
-            source_diffs = ["10k_100k"]
-        elif dataset == "random_sabre":
-            source_diffs = ["full", "0.2_20q"]
-        else:
-            source_diffs = ["full"]
+    heatmap_only = True
+    plot_folder = "icrc_pdf"
+    os.makedirs(plot_folder, exist_ok=True)
 
-        plot_folder = "icrc_pdf"
-        os.makedirs(plot_folder, exist_ok=True)
-        plot_lines_icrc_paper(plot_folder, source_diffs, dataset)
+    if not heatmap_only:
+
+        for dataset in ["benchmark_sabre", "random_sabre", "random_basic", "benchmark_basic",
+                        "benchmark_pytket", "random_pytket"]:
+            if "benchmark" in dataset:
+                source_diffs = ["10k_100k"]
+            elif dataset == "random_sabre":
+                source_diffs = ["full", "0.2_20q"]
+            else:
+                source_diffs = ["full"]
+
+            plot_lines_icrc_paper(plot_folder, source_diffs, dataset)
+
+    generate_single_heatmap("all_random_sabre_results_full.csv",
+                            "random_sabre_single_heatmap",
+                            plot_folder,
+                            COMPONENT="SWAP Overhead", DENSITY=1.0, CORES=16,
+                            SAME_SCALE=False, ANNOTATE=True, SAVE=True)
+
+    exit(0)
