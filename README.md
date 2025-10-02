@@ -1,5 +1,5 @@
 ## Fast Parallel SWAP Insertion in Qiskit
-Set up a Conda environemt  with Python 3.10.
+Set up a Conda environemt  with Python 3.10 on Linux or WSL.
 
 Install required modules:
 ```
