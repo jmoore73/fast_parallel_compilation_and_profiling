@@ -168,3 +168,82 @@ def generate_single_heatmap(CSV_FILE, FILE_NAME_PREPEND, PLOT_DIR, DENSITY=1.0, 
         plt.show()
 
 
+def generate_multiple_heatmaps(CSV_FILE, FILE_NAME_PREPEND, PLOT_DIR,
+                               DENSITY=1.0, COMPONENT="Speedup",
+                               CORES_LIST=[4, 8, 16],
+                               SAME_SCALE=False, ANNOTATE=True, SAVE=True):
+    # Load data once
+    big_df = pd.read_csv(CSV_FILE)
+    big_df = big_df[big_df['Density'] == DENSITY]
+
+    # Compute shared scale if SAME_SCALE is True
+    if SAME_SCALE:
+        vmin = big_df[COMPONENT].min()
+        vmax = big_df[COMPONENT].max()
+    else:
+        vmin = vmax = None
+
+    # Create figure with 3 subplots horizontally
+    fig, axes = plt.subplots(1, len(CORES_LIST), figsize=(4 * len(CORES_LIST), 4), sharey=True)
+
+    if len(CORES_LIST) == 1:
+        axes = [axes]  # ensure iterable
+
+    for i, cores in enumerate(CORES_LIST):
+        df_core = big_df[big_df['Cores'] == cores]
+
+        # Drop missing and pick max per (Width, Depth)
+        subset_cleaned = df_core.dropna(subset=["Gate Overhead"])
+        subset_cleaned = subset_cleaned.loc[
+            subset_cleaned.groupby(['Width', 'Depth'])[COMPONENT].idxmax()
+        ]
+
+        # Pivot for heatmap
+        heatmap_data = subset_cleaned.pivot(index='Width', columns='Depth', values=COMPONENT)
+        heatmap_data = heatmap_data.sort_index(ascending=True)
+        heatmap_data = heatmap_data.sort_index(axis=1, ascending=True)
+        heatmap_data = heatmap_data.iloc[::-1]
+
+        # Determine color scale
+        if not SAME_SCALE:
+            vmin = heatmap_data.min().min()
+            vmax = heatmap_data.max().max()
+
+        norm = Normalize(vmin=vmin, vmax=vmax)
+        cmap, vmin = custom_cmap(COMPONENT, vmax, vmin)
+
+        # Plot heatmap
+        sns.heatmap(
+            heatmap_data,
+            ax=axes[i],
+            annot=ANNOTATE,
+            fmt=".1f",
+            cmap=cmap,
+            norm=norm,
+            vmin=vmin,
+            vmax=vmax,
+            cbar=(i == len(CORES_LIST) - 1)  # show colorbar only on last heatmap
+        )
+
+        if i == len(CORES_LIST) - 1:
+            if "Overhead" in COMPONENT:
+                unit = " (%)"
+            else:
+                unit = ""
+            # Get the colorbar from the figure
+            cbar = axes[i].collections[0].colorbar
+            cbar.set_label((COMPONENT + unit), rotation=90, labelpad=15)
+
+        axes[i].set_title(f"{COMPONENT} - {cores} Cores")
+        axes[i].set_xlabel("Depth (Gates)")
+        axes[i].set_ylabel("Width (Qubits)")
+        axes[i].tick_params(axis='x', rotation=45)
+        axes[i].tick_params(axis='y', rotation=0)
+
+    plt.tight_layout()
+
+    if SAVE:
+        plt.savefig(f"{PLOT_DIR}/{FILE_NAME_PREPEND}_multi_{COMPONENT}_{DENSITY}.pdf")
+    else:
+        plt.show()
+

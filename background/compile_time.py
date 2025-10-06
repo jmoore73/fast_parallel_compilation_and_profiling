@@ -1,13 +1,9 @@
-import time
-import matplotlib.pyplot as plt
 import qiskit.circuit.random
-from qiskit import transpile
-
 import os
 import re
 import time
 import matplotlib.pyplot as plt
-from qiskit import QuantumCircuit, transpile
+from qiskit import transpile
 import qiskit.qasm3
 
 # Parameters
@@ -22,7 +18,7 @@ fixed_depth = 500
 if __name__ == '__main__':
 
     pattern = re.compile(r"random_circuit_([0-9.]+)_20q_1000g.qasm")
-    transpile(qiskit.circuit.random.random_circuit(5, 50))
+    transpile(qiskit.circuit.random.random_circuit(1, 50))
 
     p_values = []
     times = []
@@ -33,7 +29,7 @@ if __name__ == '__main__':
             match = pattern.match(fname)
             if match:
                 p_val = float(match.group(1))
-                if 0.2 <= p_val <= 1.0:
+                if 0.1 <= p_val <= 1.0:
                     print(f"Processing {fname} (p={p_val})")
                     qc = qiskit.qasm3.load(os.path.join("random_bench_qasm_density_paper",fname))
 
@@ -101,6 +97,6 @@ if __name__ == '__main__':
     ax3.grid(True)
 
     plt.tight_layout()
-    plt.savefig("all_comp_time_scaling_subplots.pdf")
+    plt.savefig("plots/all_comp_time_scaling_subplots.pdf")
     plt.show()
 

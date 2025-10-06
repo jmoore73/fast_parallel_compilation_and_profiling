@@ -7,7 +7,7 @@ from helper import remove_ops_for_given_density, calculate_gate_density, parse_a
 from random_generator import random_circuit
 
 MEASURE = False
-SEED = 7
+SEED = 2
 
 if __name__ == '__main__':
     (GATE_SET, DRAW, COMBINE,

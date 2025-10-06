@@ -5,7 +5,6 @@ Run the following to produce the figure characterising the compilation times:
 ```
 compile_times.py
 ```
-The results used in the paper have been saved to "compile_times.csv"
 
 Run the following to characterise the benchmark suites:
 ```

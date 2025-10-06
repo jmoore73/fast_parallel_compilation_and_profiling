@@ -1,12 +1,12 @@
 import os
 
-from refined_plots import plot_lines_icrc_paper, generate_single_heatmap
+from refined_plots import plot_lines_icrc_paper, generate_single_heatmap, generate_multiple_heatmaps
 
+heatmap_only = True
+plot_folder = "icrc_pdf"
 
 if __name__ == '__main__':
 
-    heatmap_only = True
-    plot_folder = "icrc_pdf"
     os.makedirs(plot_folder, exist_ok=True)
 
     if not heatmap_only:
@@ -27,5 +27,13 @@ if __name__ == '__main__':
                             plot_folder,
                             COMPONENT="SWAP Overhead", DENSITY=1.0, CORES=16,
                             SAME_SCALE=False, ANNOTATE=True, SAVE=True)
+
+    generate_multiple_heatmaps(
+        "all_random_sabre_results_full.csv",
+        "random_sabre_single_heatmap",
+        plot_folder,
+        COMPONENT="SWAP Overhead", DENSITY=1.0, CORES_LIST=[4,10,16],
+        SAME_SCALE=True, ANNOTATE=True, SAVE=True
+    )
 
     exit(0)
