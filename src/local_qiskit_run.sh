@@ -70,7 +70,7 @@ do
   echo "*** Removed "$QASM_DIR"/"$CIRCUIT_NAME"_subcirc_"$i"_transpiled.qasm"
 done
 
-### QISKIT
+### QISKIT ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 echo 'Qiskit Start Time, '$(date +%s%N) >> $TIMESTAMP_FILE
 python3 qiskit_run.py --circ_name $CIRCUIT_NAME --qasm_dir $QISKIT_DIR --num_cores $CORES --debug $DEBUG >> $TIMESTAMP_FILE
 exit_status=$?
@@ -81,7 +81,7 @@ fi
 echo 'Qiskit End Time, '$(date +%s%N) >> $TIMESTAMP_FILE
 echo "*** I have finished the qiskit transpilation! ***"
 
-### OVERHEAD STATS
+### OVERHEAD STATS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 echo "--base_name ${QASM_DIR}"/"${CIRCUIT_NAME}"
 python3 record_overheads.py --base_name $QASM_DIR"/"$CIRCUIT_NAME >> $TIMESTAMP_FILE
 exit_status=$?

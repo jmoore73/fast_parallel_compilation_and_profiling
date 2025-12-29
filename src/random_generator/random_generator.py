@@ -9,12 +9,12 @@
 # Any modifications or derivative works of this code must retain this
 # copyright notice, and modified files need to carry a notice indicating
 # that they have been altered from the originals.
+#
+# NOTICE
+# This has been edited to allow users to generate random circuits for a
+# specific gate set.
 
-"""Utility functions for generating random circuits."""
-from gate_dictionary import get_gates
-
-"""This has bee edited to allow users to generate random circuits for a specific gate set"""
-
+from gate_dictionary import get_gates # Utility functions for generating random circuits.
 import numpy as np
 
 from qiskit.circuit import ClassicalRegister, QuantumCircuit, CircuitInstruction

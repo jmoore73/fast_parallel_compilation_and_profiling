@@ -1,7 +1,7 @@
 from qiskit import QuantumRegister, QuantumCircuit
 
-from src.main.helper import remove_ops_for_given_density, draw_circuit
-from src.main.random_generator import random_circuit
+from helper import remove_ops_for_given_density, draw_circuit
+from random_generator import random_circuit
 
 GATE_SET = ["H", "S", "X", "T", "CX"]
 WIDTH = 2
