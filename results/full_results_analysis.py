@@ -30,9 +30,17 @@ if __name__ == '__main__':
 
     generate_multiple_heatmaps(
         "all_random_sabre_results_full.csv",
-        "random_sabre_single_heatmap",
+        "random_sabre_dual_heatmap",
         plot_folder,
-        COMPONENT="SWAP Overhead", DENSITY=1.0, CORES_LIST=[4,10,16],
+        COMPONENT="SWAP Overhead", DENSITY=1.0, CORES_LIST=[4,16],
+        SAME_SCALE=True, ANNOTATE=True, SAVE=True
+    )
+
+    generate_multiple_heatmaps(
+        "all_random_sabre_results_full.csv",
+        "random_sabre_triple_heatmap",
+        plot_folder,
+        COMPONENT="SWAP Overhead", DENSITY=1.0, CORES_LIST=[4, 10, 16],
         SAME_SCALE=True, ANNOTATE=True, SAVE=True
     )
 

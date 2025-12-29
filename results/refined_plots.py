@@ -236,7 +236,11 @@ def generate_multiple_heatmaps(CSV_FILE, FILE_NAME_PREPEND, PLOT_DIR,
 
         axes[i].set_title(f"{COMPONENT} - {cores} Cores")
         axes[i].set_xlabel("Depth (Gates)")
-        axes[i].set_ylabel("Width (Qubits)")
+        if i == 0:
+            axes[i].set_ylabel("Width (Qubits)")
+        else:
+            axes[i].yaxis.set_visible(False)
+
         axes[i].tick_params(axis='x', rotation=45)
         axes[i].tick_params(axis='y', rotation=0)
 

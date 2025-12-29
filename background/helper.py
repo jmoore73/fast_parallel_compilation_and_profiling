@@ -4,7 +4,7 @@ from matplotlib import pyplot as plt
 
 
 def fig_1(results_dir, names):
-    fig, axes = plt.subplots(1,2, figsize=(12, 6))  # side-by-side
+    fig, axes = plt.subplots(2,1, figsize=(8, 12))  # side-by-side
     ax1, ax2 = axes
 
     # --- Subplot (a): Scatter plot ---

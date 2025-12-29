@@ -68,7 +68,7 @@ if __name__ == '__main__':
         widths.append(qubits)
         times_width.append(end - start)
 
-    fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(15, 5))
+    fig, (ax1, ax2, ax3) = plt.subplots(3, 1, figsize=(6, 15))
 
     # Depth scaling plot (left)
     ax1.plot(depths, times_depth, marker='o', color='blue')
