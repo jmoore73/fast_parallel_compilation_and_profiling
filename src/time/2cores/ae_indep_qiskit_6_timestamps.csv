@@ -26,6 +26,6 @@ Qiskit End Time, 1759348910912485109
 Parallel Swaps, 16
 Parallel Post Transpile Depth, 43
 Parallel Post Transpile Gate Count, 57
-Level 1 Swaps, 11
-Level 1 Post Transpile Depth, 41
-Level 1 Post Transpile Gate Count, 52
+Serial Swaps, 11
+Serial Post Transpile Depth, 41
+Serial Post Transpile Gate Count, 52

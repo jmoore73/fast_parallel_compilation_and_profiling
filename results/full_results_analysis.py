@@ -2,17 +2,19 @@ import os
 
 from refined_plots import plot_lines_icrc_paper, generate_single_heatmap, generate_multiple_heatmaps
 
-heatmap_only = True
-plot_folder = "icrc_pdf"
+heatmap_only = False
+plot_folder = "icrc_r_pdf"
+
 
 if __name__ == '__main__':
 
     os.makedirs(plot_folder, exist_ok=True)
 
     if not heatmap_only:
-
-        for dataset in ["benchmark_sabre", "random_sabre", "random_basic", "benchmark_basic",
-                        "benchmark_pytket", "random_pytket"]:
+        for dataset in ["benchmark_sabre", "random_sabre",
+                        "random_basic", "benchmark_basic",
+                        "benchmark_pytket", "random_pytket",
+                        "linear_proc", "qiskit2"]:
             if "benchmark" in dataset:
                 source_diffs = ["10k_100k"]
             elif dataset == "random_sabre":
@@ -21,6 +23,7 @@ if __name__ == '__main__':
                 source_diffs = ["full"]
 
             plot_lines_icrc_paper(plot_folder, source_diffs, dataset)
+
 
     generate_single_heatmap("all_random_sabre_results_full.csv",
                             "random_sabre_single_heatmap",

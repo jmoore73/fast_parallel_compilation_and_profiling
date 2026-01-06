@@ -1,6 +1,5 @@
 OPENQASM 3.0;
 include "stdgates.inc";
-bit[6] meas;
 u2(0, -pi) $0;
 u2(0, -pi) $1;
 u2(0, -pi) $2;

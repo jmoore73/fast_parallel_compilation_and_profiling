@@ -12,7 +12,7 @@ if __name__ == "__main__":
     bfpt_file = BASE_NAME + "_transpiled.qasm"
     qiskit_file = BASE_NAME + "_qiskit.qasm"
 
-    for file, name in zip([bfpt_file, qiskit_file], ["Parallel", "Level 1"]):
+    for file, name in zip([bfpt_file, qiskit_file], ["Parallel", "Serial"]):
         try:
             qc = qiskit.qasm3.load(file)
         except QASM3ImporterError as e:
