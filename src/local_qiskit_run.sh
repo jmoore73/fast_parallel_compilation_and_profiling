@@ -1,11 +1,11 @@
 #!/bin/bash
 
-CIRCUIT_NAME="ae_indep_qiskit_6"
+CIRCUIT_NAME="4gt12-v0_87"
 DEPTH="d"
 WIDTH="w"
 DENSITY="dens"
-DEBUG="False"
-CORES=2
+DEBUG="True"
+CORES=3
 QISKIT_DIR="../qasm"
 TIME_DIR="time/"$CORES"cores"
 

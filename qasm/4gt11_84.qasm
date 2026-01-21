@@ -1,0 +1,24 @@
+// Benchmark sourced from Qiskit Red Queen
+// https://github.com/Qiskit/red-queen/blob/3c5367c8918c56adcaaed8dadfe7699a179f7316/red_queen/games/mapping/benchmarks/misc/4gt11_84.qasm
+
+OPENQASM 2.0;
+include "qelib1.inc";
+qreg q[5];
+h q[0];
+t q[2];
+t q[1];
+t q[0];
+cx q[1], q[2];
+cx q[0], q[1];
+cx q[2], q[0];
+tdg q[1];
+cx q[2], q[1];
+tdg q[2];
+tdg q[1];
+t q[0];
+cx q[0], q[1];
+cx q[2], q[0];
+cx q[1], q[2];
+h q[0];
+cx q[4], q[0];
+cx q[0], q[4];

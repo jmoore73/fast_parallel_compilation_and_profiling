@@ -7,7 +7,6 @@ OPENQASM 2.0;
 include "qelib1.inc";
 qreg eval[4];
 qreg q[1];
-creg meas[5];
 u2(0,-pi) eval[0];
 u2(0,-pi) eval[1];
 u2(0,-pi) eval[2];
@@ -40,8 +39,4 @@ h eval[1];
 cp(-pi/2) eval[0],eval[1];
 h eval[0];
 barrier eval[0],eval[1],eval[2],eval[3],q[0];
-measure eval[0] -> meas[0];
-measure eval[1] -> meas[1];
-measure eval[2] -> meas[2];
-measure eval[3] -> meas[3];
-measure q[0] -> meas[4];
+

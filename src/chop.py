@@ -15,7 +15,7 @@ if __name__ == '__main__':
     # Read file and separate header and body
     with open(CIRCUIT, 'r') as f:
         for line in f:
-            if line.startswith(('OPENQASM', 'include', 'qubit', 'bit', 'qreg', 'creg')):
+            if line.startswith(('OPENQASM', 'include', 'qubit', 'bit', 'qreg')):
                 header.append(line)
             elif not line.startswith(('//', 'measure', 'barrier')) and line.strip():
                 body.append(line)

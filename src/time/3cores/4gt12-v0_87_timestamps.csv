@@ -1,0 +1,59 @@
+Column, Value
+Name, 4gt12-v0_87
+Depth, d
+Density, dens
+Width, w
+Chopping Start Time, 1769010568614298988
+Chopping End Time, 1769010568886450610
+Concatenate Start Time, 1769010570273103833
+Concatenate End Time, 1769010570793625069
+Failed to load the QASM 3 file: '2,0: non-stdgates imports not currently supported'
+Loaded QASM 2 file: ../qasm/3cores/4gt12-v0_87_subcirc_1.qasm
+sabre trivial 0
+Appending permutation circuit to subcircuit circuit-162
+Appended permutation circuit to subcircuit circuit-162
+Saved circuit-162 to ../qasm/3cores/4gt12-v0_87_subcirc_1_transpiled.qasm
+Core 1 Setup Start Time, 1769010569856826424
+Core 1 Setup End Time, 1769010570035557799
+Core 1 Transpile Start Time, 1769010570035562640
+Core 1 Transpile End Time, 1769010570054789098
+Core 1 Permutation Start Time, 1769010570054789098
+Core 1 Permutation End Time, 1769010570055369679
+Core 1 Parallel End Time, 1769010570072995742
+Finished on core 1 in 216169318ns
+Failed to load the QASM 3 file: '2,0: non-stdgates imports not currently supported'
+Loaded QASM 2 file: ../qasm/3cores/4gt12-v0_87_subcirc_2.qasm
+sabre trivial 0
+Appending permutation circuit to subcircuit circuit-162
+Appended permutation circuit to subcircuit circuit-162
+Saved circuit-162 to ../qasm/3cores/4gt12-v0_87_subcirc_2_transpiled.qasm
+Core 2 Setup Start Time, 1769010569857281791
+Core 2 Setup End Time, 1769010570034610666
+Core 2 Transpile Start Time, 1769010570034614437
+Core 2 Transpile End Time, 1769010570054169253
+Core 2 Permutation Start Time, 1769010570054169253
+Core 2 Permutation End Time, 1769010570054734525
+Core 2 Parallel End Time, 1769010570067955522
+Finished on core 2 in 210673731ns
+Failed to load the QASM 3 file: '2,0: non-stdgates imports not currently supported'
+Loaded QASM 2 file: ../qasm/3cores/4gt12-v0_87_subcirc_3.qasm
+sabre trivial 0
+Saved circuit-162_final to ../qasm/3cores/4gt12-v0_87_subcirc_3_transpiled.qasm
+Core 3 Setup Start Time, 1769010569857135588
+Core 3 Setup End Time, 1769010570023577826
+Core 3 Transpile Start Time, 1769010570023583970
+Core 3 Transpile End Time, 1769010570052519128
+Core 3 Permutation Start Time, 1769010570052519128
+Core 3 Permutation End Time, 1769010570052519896
+Core 3 Parallel End Time, 1769010570062488818
+Finished on core 3 in 205353230ns
+Qiskit Start Time, 1769010571006442961
+Failed to load the QASM 3 file: '5,0: non-stdgates imports not currently supported'
+Transpiled 4gt12-v0_87 from ../qasm/4gt12-v0_87.qasm
+Qiskit End Time, 1769010571843635179
+Parallel Swaps, 74
+Parallel Post Transpile Depth, 223
+Parallel Post Transpile Gate Count, 325
+Serial Swaps, 63
+Serial Post Transpile Depth, 203
+Serial Post Transpile Gate Count, 310

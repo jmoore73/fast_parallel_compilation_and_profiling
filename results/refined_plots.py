@@ -38,8 +38,8 @@ def plot_lines_icrc_paper(folder, source_diff, dataset):
 
                 # Set color and line colors based on component
                 if component == 'Speedup':
-                    colors = ['orange' if val < 1 else 'blue' for val in df[component]]
-                    line_colors = ['orange', 'blue', 'black']
+                    colors = ['#009E73' if val < 1 else '#CC79A7' for val in df[component]]
+                    line_colors = ['#009E73', '#CC79A7', 'black']
                 else:
                     colors = ['orange' if val > 0 else 'blue' for val in df[component]]
                     line_colors = ['blue', 'orange', 'black']
@@ -49,7 +49,7 @@ def plot_lines_icrc_paper(folder, source_diff, dataset):
                     ax.set_xticks([25000, 50000, 75000, 100000])
 
                 # Scatter plot
-                scatter = ax.scatter(df[variable], df[component], color=colors, alpha=0.1)
+                scatter = ax.scatter(df[variable], df[component], color=colors, alpha=0.5)
                 ax.set_title(f'{variable} vs {component}')
                 ax.set_xlabel(x_label)
                 ax.set_ylabel(y_label)
@@ -57,14 +57,23 @@ def plot_lines_icrc_paper(folder, source_diff, dataset):
 
                 # Group and plot min, max, avg lines
                 grouped = df.groupby(variable)[component].agg(['min', 'max', 'mean'])
-                min_line, = ax.plot(grouped.index, grouped['min'], color=line_colors[0], linestyle='--', label='Min')
-                max_line, = ax.plot(grouped.index, grouped['max'], color=line_colors[1], linestyle='--', label='Max')
-                avg_line, = ax.plot(grouped.index, grouped['mean'], color=line_colors[2], linestyle='-', label='Avg')
+                avg_line, = ax.plot(grouped.index, grouped['mean'], color=line_colors[2], linestyle='-', label='Average')
                 avg_line_handle = avg_line
+                if component == 'Speedup':
+                    speedup_min_line_handle, = ax.plot(grouped.index, grouped['min'], color=line_colors[0],
+                                                       linestyle='dashdot', label='Speedup Min')
+                    speedup_max_line_handle, = ax.plot(grouped.index, grouped['max'], color=line_colors[1],
+                                                       linestyle='--', label='Speedup Max')
+                else:
+                    min_line_handle, = ax.plot(grouped.index, grouped['min'], color=line_colors[0],
+                                                       linestyle='dashdot', label='Overheads Min')
+                    max_line_handle, = ax.plot(grouped.index, grouped['max'], color=line_colors[1],
+                                                       linestyle='--',label='Overheads Max')
 
             # Add legend to last used subplot
             if avg_line_handle:
-                fig.legend(handles=[avg_line_handle], loc='upper center', ncol=1, bbox_to_anchor=(0.5, 0.03))
+                fig.legend(handles=[speedup_min_line_handle, speedup_max_line_handle, avg_line_handle, min_line_handle, max_line_handle],
+                           loc='upper center', ncol=3, bbox_to_anchor=(0.5, 0.03))
 
             plt.tight_layout()
             plt.savefig(f"{folder}/{file_name_prepend}_{variable}.pdf", bbox_inches='tight')
@@ -78,11 +87,11 @@ def custom_cmap(component, vmax, vmin):
     if cmap == "custom":
         if component == "Speedup":
             if vmin < 1:
-                colors = ["black", "white", "purple"]
+                colors = ["black", "white", "darkviolet"]
                 nodes = [0.0, (1 - vmin) / (vmax - vmin), 1.0]
             else:
                 vmin = 1
-                colors = ["white", "purple"]
+                colors = ["white", "darkviolet"]
                 nodes = [0.0, 1.0]
             cmap = LinearSegmentedColormap.from_list("CustomMap", list(zip(nodes, colors)))
         if component.__contains__("Overhead"):
@@ -183,7 +192,7 @@ def generate_multiple_heatmaps(CSV_FILE, FILE_NAME_PREPEND, PLOT_DIR,
     else:
         vmin = vmax = None
 
-    # Create figure with 3 subplots horizontally
+    # Create figure with subplots horizontally
     fig, axes = plt.subplots(1, len(CORES_LIST), figsize=(4 * len(CORES_LIST), 4), sharey=True)
 
     if len(CORES_LIST) == 1:
@@ -250,4 +259,70 @@ def generate_multiple_heatmaps(CSV_FILE, FILE_NAME_PREPEND, PLOT_DIR,
         plt.savefig(f"{PLOT_DIR}/{FILE_NAME_PREPEND}_multi_{COMPONENT}_{DENSITY}.pdf")
     else:
         plt.show()
+
+
+def generate_full_heatmap(CSV_FILE, FILE_NAME_PREPEND, PLOT_DIR, DENSITY=1.0,
+                          COMPONENTS=None, SAME_SCALE=False,ANNOTATE=True, SAVE=True):
+    nrows = 3
+    cmap = "custom"
+
+    df = pd.read_csv(CSV_FILE)
+    big_df = df[df['Density'] == DENSITY]
+
+    if COMPONENTS is None:
+        COMPONENTS = ["Speedup", "SWAP Overhead", "Depth Overhead", "Gate Overhead"]
+    for component in COMPONENTS:
+        print("*" * 20)
+        print(component)
+        vavg = big_df[component].mean()
+        vmin = big_df[component].min()
+        vmax = big_df[component].max()
+        print("min: %.2f" % vmin)
+        print("max: %.2f" % vmax)
+        print("avg: %.2f" % vavg)
+
+        norm = Normalize(vmin=vmin, vmax=vmax)
+        cmap, vmin = custom_cmap(component, vmax, vmin)
+
+        core_counts = big_df['Cores'].unique()
+        core_counts.sort()
+        num_cores = len(core_counts)
+        ncols = math.ceil(num_cores / nrows)
+        if nrows * ncols < num_cores:
+            raise ValueError("The grid dimensions are too small for the number of core counts.")
+
+        fig, axes = plt.subplots(nrows=nrows, ncols=ncols, figsize=(16, 4 * nrows), sharey=True)
+        axes_flat = axes.flat
+
+        for i, (ax, cores) in enumerate(zip(axes_flat, core_counts)):
+            subset_ = big_df[big_df['Cores'] == cores]
+            heatmap_data = subset_.pivot(index='Width', columns='Depth', values=component)
+            heatmap_data = heatmap_data.sort_index(ascending=True)  # Sort 'Width'
+            heatmap_data = heatmap_data.sort_index(axis=1, ascending=True)  # Sort 'Depth'
+            heatmap_data = heatmap_data.iloc[::-1]
+            sns.heatmap(
+                heatmap_data, ax=ax, annot=ANNOTATE, fmt=".1f", cmap=cmap, norm=norm, vmin=vmin, vmax=vmax, cbar=False
+            )
+            ax.set_title(f'Cores: {cores}')
+            ax.set_xlabel('Depth (Gates)')
+            if i % ncols == 0:
+                ax.set_ylabel('Width (Qubits)')
+                ax.tick_params(axis='y', rotation=0)
+
+        cbar_ax = fig.add_axes([0.93, 0.15, 0.02, 0.7])  # Adjust position and size as needed
+        sm = plt.cm.ScalarMappable(cmap=cmap, norm=norm)
+        cbar = fig.colorbar(sm, cax=cbar_ax)
+        cbar.set_label(component)
+
+        for j in range(i + 1, nrows * ncols):
+            fig.delaxes(axes_flat[j])
+
+        fig.suptitle(f'Heatmaps for {component}', fontsize=16)
+
+        plt.tight_layout(rect=[0, 0, 0.9, 0.95])
+        if SAVE:
+            plt.savefig(f"{PLOT_DIR}/{FILE_NAME_PREPEND}_{component}_{DENSITY}.png")
+            plt.savefig(f"{PLOT_DIR}/{FILE_NAME_PREPEND}_{component}_{DENSITY}.pdf")
+        else:
+            plt.show()
 

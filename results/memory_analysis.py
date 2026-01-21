@@ -13,6 +13,7 @@ fixed_depth = 40000
 if __name__ == "__main__":
 
     df = pd.read_csv(DATA_CSV)
+    # df["Parallel maxrss_kb"] = df["Parallel maxrss_kb temp"]*df["Cores"]
 
     cmap = [
         "#000000",  # black

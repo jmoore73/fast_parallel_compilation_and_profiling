@@ -1,0 +1,11 @@
+OPENQASM 3.0;
+include "stdgates.inc";
+h $0;
+cx $0, $1;
+h $1;
+swap $2, $3;
+cx $1, $3;
+h $3;
+cx $3, $2;
+h $2;
+cx $0, $2;
