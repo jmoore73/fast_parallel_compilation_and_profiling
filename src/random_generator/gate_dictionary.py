@@ -62,12 +62,14 @@ gates_2q = {
     "SWAP" : (standard_gates.SwapGate, 2, 0),
     "ISWAP" : (standard_gates.iSwapGate, 2, 0),
 }
+
 gates_3q = {
     "CCX" : (standard_gates.CCXGate, 3, 0),
     "CSWAP" : (standard_gates.CSwapGate, 3, 0),
     "CCZ" : (standard_gates.CCZGate, 3, 0),
     "RCCX" : (standard_gates.RCCXGate, 3, 0),
 }
+
 gates_4q = {
     "C3SX" : (standard_gates.C3SXGate, 4, 0),
     "RC3X" : (standard_gates.RC3XGate, 4, 0),

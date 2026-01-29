@@ -56,12 +56,13 @@ def remove_ops_for_given_density(circuit, density, draw=False):
         return circuit
     if draw:
         draw_circuit(circuit, "../circuit_diagrams/" + circuit.name + "_before.png")
+
     max_ops = circuit.num_qubits * circuit.depth()
     ops_to_remove = max_ops - math.ceil(max_ops * density)
+
     if ops_to_remove > (max_ops - circuit.depth()):
         print("***** Cannot make circuit density that low and maintain depth *****")
         return None
-
 
     removal_gates, safe_qubit = validate_removal_numbers(circuit, ops_to_remove, max_ops)
     try:
@@ -75,10 +76,12 @@ def remove_ops_for_given_density(circuit, density, draw=False):
     final_num_ops = len(circuit.data) - removal_gates[0] - removal_gates[1]
     ops_removed = 0
     print("Starting removal...")
+
     while removal_gates[1] > 0 or removal_gates[0] > 0:
         remove_loc = random.randint(0, len(unsafe_qubits_circuit)-1)
         instr = unsafe_qubits_circuit[remove_loc]
         gate_to_remove = None
+
         if safe_qubit not in instr.qubits:
             if len(instr.qubits) == 1 and removal_gates[0] > 0:
                 gate_to_remove = instr
@@ -93,9 +96,11 @@ def remove_ops_for_given_density(circuit, density, draw=False):
                 unsafe_qubits_circuit.remove(gate_to_remove)
         else:
             print("safe_qubit in instr.qubits")
+
     assert ops_removed == ops_to_remove
     assert len(circuit.data) == final_num_ops
     print("Gates removed!")
+
     if draw:
         draw_circuit(circuit, "../circuit_diagrams/" + circuit.name + "_after.png")
     return circuit
@@ -114,19 +119,25 @@ def count_x_qubit_gates(circuit, qubit=None):
     try:
         counts = [0, 0]
         checksum = 0
+
+        # Loop through all gates in circuit and update gate qubit counts
         for instr in circuit.data:
             if qubit is None or qubit in instr.qubits:
                 num_qubits = len(instr.qubits)
                 counts[num_qubits - 1] = counts[num_qubits - 1] + 1
+
         circ_gates = dict(circuit.count_ops())
         total = 0
+
         for g in circ_gates:
             total = total + circ_gates.get(g)
+
         if qubit is None:
             for c in counts:
                 checksum = checksum + c
             if checksum != total:
                 raise Exception("Incorrect gate counting")
+
     except IndexError as indexError:
         print(circuit.name, "- not basis gates -", indexError)
         return [math.nan, math.nan, math.nan]
@@ -139,24 +150,31 @@ def validate_removal_numbers(circuit, ops_to_remove, max_ops):
     gate_counts = count_x_qubit_gates(circuit)
     safe_counts = count_x_qubit_gates(circuit, safe_qubit)
     qubits = list(range(circuit.num_qubits))
+
+    # randomly choose a safe qubit until one is chosen that has gate
+    # counts that enable the density wanted
     while max_ops - ops_to_remove < safe_counts[0] + 2*safe_counts[1]:
         print("WARNING - Impossible to reduce density with this safe qubit")
         qubits.remove(qubit_idx)
         qubit_idx = random.choice(qubits)
         safe_qubit = circuit.qubits[qubit_idx]
         safe_counts = count_x_qubit_gates(circuit, safe_qubit)
+
     removal_counts = [0, random.randint(0, min(gate_counts[1], int(ops_to_remove / 2)))]
     removal_counts[0] = ops_to_remove - 2 * removal_counts[1]
+
     if safe_counts[1] + removal_counts[1] > gate_counts[1]:
         extra_1q = -2 * (gate_counts[1] - safe_counts[1] - removal_counts[1])
         removal_counts[0] += extra_1q
         removal_counts[1] -= (extra_1q/2)
+
     if removal_counts[0] > gate_counts[0]:
         extra_2q = removal_counts[0] - gate_counts[0]
         if extra_2q % 2 != 0:
             extra_2q += 1
         removal_counts[1] += (extra_2q/2)
         removal_counts[0] -= extra_2q
+
     assert removal_counts <= gate_counts
     assert removal_counts + safe_counts <= gate_counts
     assert ((removal_counts[1] * 2) + removal_counts[0]) == ops_to_remove

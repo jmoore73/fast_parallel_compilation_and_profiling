@@ -67,6 +67,17 @@ def initialise_grid_lattice(test_circuit):
     return initial_layout, map
 
 
+def initialise_line_lattice(num_qubits):
+    map = CouplingMap()
+    for q in range(num_qubits):
+        map.add_physical_qubit(q)
+    map = map.from_line(num_qubits, bidirectional=True)
+    initial_layout = []
+    for q in range(num_qubits):
+        initial_layout.append(q)
+    return initial_layout, map
+
+
 def transpile_and_insert_permute(subcircuit, coupling_map, qubit_list, qregs, barriers, debug, ROUTING, LAYOUT,
                                  OPT_LEVEL):
     transpile_start_time = time.time_ns()
@@ -204,6 +215,8 @@ if __name__ == "__main__":
     # set up the lattice/processor layout for the given test circuit (depends on num qubits)
     if SHAPE == "square" or SHAPE == "Square":
         initial_layout, coupling_map = initialise_square_lattice(quantum_subcircuit.num_qubits)
+    if SHAPE == "line":
+        initial_layout, coupling_map = initialise_line_lattice(quantum_subcircuit.num_qubits)
     elif SHAPE == "[2xm]":
         initial_layout, coupling_map = initialise_grid_lattice(quantum_subcircuit)
 

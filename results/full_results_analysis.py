@@ -4,7 +4,7 @@ from refined_plots import plot_lines_icrc_paper, generate_single_heatmap, genera
     generate_full_heatmap
 
 plot_folder = "icrc_r_pdf"
-heatmaps = False
+heatmaps = True
 
 
 if __name__ == '__main__':
@@ -14,12 +14,14 @@ if __name__ == '__main__':
 
     if not heatmaps:
         for dataset in ["benchmark_sabre", "random_sabre",
-                        # "random_basic", "benchmark_basic",
-                        # "benchmark_pytket", "random_pytket",
-                        # "linear_proc", "qiskit2"
+                        "random_basic", "benchmark_basic",
+                        "benchmark_pytket", "random_pytket",
+                        "linear_proc", "qiskit2"
                         ]:
             if "benchmark" in dataset:
                 source_diffs = ["10k_100k"]
+                if dataset == 'benchmark_sabre':
+                    source_diffs = ["10k_100k", "vqe"]
             elif dataset == "random_sabre":
                 source_diffs = ["full", "0.2_20q"]
             else:

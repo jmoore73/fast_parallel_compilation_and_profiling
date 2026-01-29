@@ -7,7 +7,7 @@ from qiskit import transpile, QuantumCircuit
 from qiskit.qasm3 import QASM3ImporterError
 from qiskit.transpiler.passes import RemoveBarriers
 
-from parallel_create_transpile_permute import initialise_square_lattice, initialise_grid_lattice, ROUTING, LAYOUT, OPT_LEVEL
+from parallel_create_transpile_permute import initialise_square_lattice, initialise_line_lattice, initialise_grid_lattice, ROUTING, LAYOUT, OPT_LEVEL
 
 
 def parse_arguments():
@@ -60,6 +60,8 @@ if __name__ == "__main__":
     # set up the lattice/processor layout for the given test circuit (depends on num qubits)
     if SHAPE == "square" or SHAPE == "Square":
         initial_layout, coupling_map = initialise_square_lattice(test_circuit.num_qubits)
+    if SHAPE == "line":
+        initial_layout, coupling_map = initialise_line_lattice(test_circuit.num_qubits)
     elif SHAPE == "[2xm]":
         initial_layout, coupling_map = initialise_grid_lattice(test_circuit)
 

@@ -51,34 +51,7 @@ def add_measurements_logical_order(qc, final_perm):
     return qc
 
 
-def trivial_circuit(swaps=False):
-    qreg_q = QuantumRegister(4, 'q')
-    circuit = QuantumCircuit(qreg_q)
-    if not swaps:
-        circuit.h(qreg_q[0])
-        circuit.cx(qreg_q[0], qreg_q[1])
-        circuit.h(qreg_q[1])
-        circuit.cx(qreg_q[1], qreg_q[2])
-    else:
-        circuit.h(qreg_q[0])
-        circuit.swap(qreg_q[2], qreg_q[3])
-        circuit.cx(qreg_q[0], qreg_q[1])
-        circuit.swap(qreg_q[1], qreg_q[2])
-        circuit.swap(qreg_q[0], qreg_q[1])
-        circuit.barrier(qreg_q[0], qreg_q[1], qreg_q[2], qreg_q[3])
-        circuit.swap(qreg_q[0], qreg_q[1])
-        circuit.swap(qreg_q[1], qreg_q[2])
-        circuit.swap(qreg_q[2], qreg_q[3])
-        circuit.barrier(qreg_q[0], qreg_q[1], qreg_q[2], qreg_q[3])
-        circuit.h(qreg_q[1])
-        circuit.cx(qreg_q[1], qreg_q[2])
-        circuit.swap(qreg_q[0], qreg_q[1])
-        circuit.barrier(qreg_q[0], qreg_q[1], qreg_q[2], qreg_q[3])
-    return circuit
-
-
 def remove_cregs(qc):
-    # Create a new circuit with only quantum registers
     qc_no_classical = QuantumCircuit()
     for qreg in qc.qregs:
         qc_no_classical.add_register(qreg)
@@ -96,7 +69,6 @@ def pad_counts(counts, width):
 
 
 def plot_results(filename):
-    # Load data
     df = pd.read_csv("fidelity_results.csv")
     df = df.sort_values(["Name", "Cores"])
     names = df["Name"].unique()
@@ -119,7 +91,6 @@ def plot_results(filename):
 
     bar_width = 0.35
     group_gap = 1.0
-
     x_positions = []
     x_labels = []
     x = 0
@@ -131,7 +102,7 @@ def plot_results(filename):
         subset = df[df["Name"] == name]
 
         for _, row in subset.iterrows():
-            # Parallel Fidelity (solid)
+            # Parallel Fidelity (solid bars)
             ax.bar(
                 x,
                 row["Parallel Fidelity"],
@@ -139,7 +110,7 @@ def plot_results(filename):
                 color=core_colors[row["Cores"]]
             )
 
-            # Qiskit Fidelity (hatched)
+            # Qiskit Fidelity (lined bars)
             ax.bar(
                 x + bar_width,
                 row["Qiskit Fidelity"],
@@ -151,13 +122,12 @@ def plot_results(filename):
 
             x += bar_width * 2
 
-        # Label once per group (center of the group span)
+        # Label once per group
         group_end = x - bar_width
         x_positions.append((group_start + group_end) / 2)
         x_labels.append(name)
         x += group_gap
 
-    # Axis formatting
     ax.set_xticks(x_positions)
     ax.set_xticklabels(x_labels, rotation=45, ha="right")
     ax.set_ylabel("Fidelity")

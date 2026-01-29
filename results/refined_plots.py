@@ -48,6 +48,9 @@ def plot_lines_icrc_paper(folder, source_diff, dataset):
                     # ax.tick_params(axis='x', rotation=45)
                     ax.set_xticks([25000, 50000, 75000, 100000])
 
+                if (source_d == "vqe") and (dataset == "benchmark_sabre") and (variable == "Depth"):
+                    ax.set_xscale('log')
+
                 # Scatter plot
                 scatter = ax.scatter(df[variable], df[component], color=colors, alpha=0.5)
                 ax.set_title(f'{variable} vs {component}')
@@ -78,7 +81,7 @@ def plot_lines_icrc_paper(folder, source_diff, dataset):
             plt.tight_layout()
             plt.savefig(f"{folder}/{file_name_prepend}_{variable}.pdf", bbox_inches='tight')
             # plt.show()
-            plt.close(fig)  # Close the figure to prevent overlap
+            plt.close(fig)
 
 
 def custom_cmap(component, vmax, vmin):
@@ -128,17 +131,16 @@ def generate_single_heatmap(CSV_FILE, FILE_NAME_PREPEND, PLOT_DIR, DENSITY=1.0, 
     # Create a figure with a single subplot
     fig, ax = plt.subplots(figsize=(5, 4))
 
-    # Process the data
     subset_cleaned = big_df.dropna(subset=["Gate Overhead"])
     subset_cleaned = subset_cleaned.loc[subset_cleaned.groupby(['Width', 'Depth'])[COMPONENT].idxmax()]
 
-    # Create the heatmap data
+    # heatmap data
     heatmap_data = subset_cleaned.pivot(index='Width', columns='Depth', values=COMPONENT)
     heatmap_data = heatmap_data.sort_index(ascending=True)  # Sort 'Width'
     heatmap_data = heatmap_data.sort_index(axis=1, ascending=True)  # Sort 'Depth'
     heatmap_data = heatmap_data.iloc[::-1]  # Reverse the order of rows for visual purposes
 
-    # Create the heatmap
+    # create the heatmap
     sns.heatmap(
         heatmap_data,
         ax=ax,
@@ -161,16 +163,11 @@ def generate_single_heatmap(CSV_FILE, FILE_NAME_PREPEND, PLOT_DIR, DENSITY=1.0, 
 
     plt.yticks(rotation=0)
     plt.xticks(rotation=45)
-
-    # Set labels
     ax.set_xlabel('Depth (Gates)')
     ax.set_ylabel('Width (Qubits)')
     ax.set_title(f'Heatmap for {COMPONENT} using {CORES} Cores')
-
-    # Adjust layout
     plt.tight_layout()
 
-    # Save if needed
     if SAVE:
         plt.savefig(f"{PLOT_DIR}/{FILE_NAME_PREPEND}_{CORES}_{DENSITY}_{COMPONENT}.pdf")
     else:
@@ -181,7 +178,6 @@ def generate_multiple_heatmaps(CSV_FILE, FILE_NAME_PREPEND, PLOT_DIR,
                                DENSITY=1.0, COMPONENT="Speedup",
                                CORES_LIST=[4, 8, 16],
                                SAME_SCALE=False, ANNOTATE=True, SAVE=True):
-    # Load data once
     big_df = pd.read_csv(CSV_FILE)
     big_df = big_df[big_df['Density'] == DENSITY]
 
@@ -200,8 +196,6 @@ def generate_multiple_heatmaps(CSV_FILE, FILE_NAME_PREPEND, PLOT_DIR,
 
     for i, cores in enumerate(CORES_LIST):
         df_core = big_df[big_df['Cores'] == cores]
-
-        # Drop missing and pick max per (Width, Depth)
         subset_cleaned = df_core.dropna(subset=["Gate Overhead"])
         subset_cleaned = subset_cleaned.loc[
             subset_cleaned.groupby(['Width', 'Depth'])[COMPONENT].idxmax()

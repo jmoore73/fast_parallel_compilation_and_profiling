@@ -6,17 +6,6 @@ from qiskit.transpiler import CouplingMap
 ROUTING = "sabre"
 LAYOUT = "trivial"
 
-def initialise_grid_lattice(test_circuit):
-    num_qubits = test_circuit.num_qubits
-    if ((num_qubits % 2) != 0): num_qubits = num_qubits + 1
-    map = CouplingMap()
-    for q in range(num_qubits):
-        map.add_physical_qubit(q)
-    map = map.from_grid(2, int(num_qubits / 2), bidirectional=True)
-    initial_layout = []
-    for q in range(num_qubits):
-        initial_layout.append(q)
-    return initial_layout, map
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Process some arguments.')
