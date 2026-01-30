@@ -213,7 +213,7 @@ if __name__ == "__main__":
         quantum_subcircuit.add_register(ancilla)
 
     # set up the lattice/processor layout for the given test circuit (depends on num qubits)
-    if SHAPE == "square" or SHAPE == "Square":
+    if SHAPE == "square":
         initial_layout, coupling_map = initialise_square_lattice(quantum_subcircuit.num_qubits)
     if SHAPE == "line":
         initial_layout, coupling_map = initialise_line_lattice(quantum_subcircuit.num_qubits)

@@ -61,7 +61,7 @@ if __name__ == "__main__":
         test_circuit.add_qubit(ancilla_qubit)
 
     # set up the lattice/processor layout for the given test circuit (depends on num qubits)
-    if SHAPE == "square" or SHAPE == "Square":
+    if SHAPE == "square":
         initial_layout, coupling_map = initialise_square_lattice(test_circuit.num_qubits)
     elif SHAPE == "[2xm]":
         initial_layout, coupling_map, coupling_graph = initialise_grid_lattice(test_circuit)
@@ -81,7 +81,7 @@ if __name__ == "__main__":
         qasm_dir = qasm_dir.joinpath(core_part)
     path = os.path.join(qasm_dir, qasm_file)
     if DEBUG:
-        print("✅ saved circuit to ", os.path.join(qasm_dir, qasm_file))
+        print("Saved circuit to ", os.path.join(qasm_dir, qasm_file))
     if not os.path.exists(qasm_dir):
         os.makedirs(qasm_dir)
     circuit_to_qasm(test_circuit, path, maxwidth=201)

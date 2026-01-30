@@ -3,9 +3,6 @@ import argparse
 
 from qiskit.transpiler import CouplingMap
 
-ROUTING = "sabre"
-LAYOUT = "trivial"
-
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Process some arguments.')
