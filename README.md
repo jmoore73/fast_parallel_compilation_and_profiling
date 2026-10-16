@@ -1,3 +1,10 @@
+## Publication and Citation
+The theory and results for the experiments in this repo are available in https://www.nature.com/articles/s44335-026-00079-z
+
+Please cite use of this work:
+
+Moore, J., Hart, M. & McAllister, J. Efficient parallel compilation and profiling of quantum circuits at large scales. npj Unconv. Comput. 3, 34 (2026). https://doi.org/10.1038/s44335-026-00079-z
+
 ## Background Material
 The data and code to produce the plots used in the background material can be found in directory "background."
 
